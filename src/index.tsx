@@ -37,7 +37,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Router>
+      <Router basename="/admin">
         <Routes>
           <Route path="/*" element={<App />} />
         </Routes>
