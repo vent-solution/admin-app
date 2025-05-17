@@ -38,9 +38,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <Router basename="/admin">
-        <Routes>
-          <Route path="/*" element={<App />} />
-        </Routes>
+        <App />
       </Router>
     </Provider>
   </React.StrictMode>
