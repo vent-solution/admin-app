@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LoginModel } from "../users/models/loginModel";
 import markRequiredFormField from "../../global/validation/markRequiredFormField";
 import { AlertTypeEnum } from "../../global/enums/alertTypeEnum";
@@ -32,17 +32,7 @@ const LoginForm: React.FC = () => {
 
   const handleTogglePassword = () => setShowPassword(!showPassword);
 
-  // const [ip, setIp] = useState("");
-
-  // useEffect(() => {
-  //   const fetchIp = async () => {
-  //     const publicIp = await getIp();
-  //     if (publicIp) {
-  //       setIp(publicIp);
-  //     }
-  //   };
-  //   fetchIp();
-  // }, []);
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -96,6 +86,9 @@ const LoginForm: React.FC = () => {
       setLoading(true);
 
       const result = await postData("/log-in", loginDetails);
+
+      if (!result) {
+      }
       if (result.data.status && result.data.status !== "OK") {
         dispatch(
           setAlert({
@@ -108,11 +101,10 @@ const LoginForm: React.FC = () => {
       } else if (Number(financialSettings.settings[0].brokerFee) === 0) {
         localStorage.setItem("dnap-user", JSON.stringify(result.data));
 
-        window.location.href = "/settings";
+        navigate("/settings");
       } else {
         localStorage.setItem("dnap-user", JSON.stringify(result.data));
-        // window.location.href = "/dashboard";
-        window.location.href = "/settings";
+        navigate("/dashboard");
       }
     } catch (error: any) {
       if (axios.isCancel(error)) {
