@@ -5,6 +5,7 @@ import Preloader from "../../other/Preloader";
 import { UserModel } from "../users/models/userModel";
 import { getUserById } from "../users/usersSlice";
 import LoginForm from "./loginForm";
+import { useNavigate } from "react-router-dom";
 
 interface Props {}
 
@@ -13,6 +14,8 @@ const LoginPage: React.FC<Props> = () => {
   const [userId, setUserId] = useState<number | undefined>(0);
 
   const user = useSelector(getUserById(Number(userId)));
+
+  const navigate = useNavigate();
 
   // create some delay 3sec and check if the user is authenticated already
   useEffect(() => {
@@ -27,7 +30,7 @@ const LoginPage: React.FC<Props> = () => {
       }
 
       if (user?.userStatus === UserStatusEnum.online) {
-        window.location.href = "/dashboard";
+        navigate("/dashboard");
       }
     }, 3000);
     return () => clearTimeout(timeOut);
