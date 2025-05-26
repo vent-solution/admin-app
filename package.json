@@ -33,7 +33,6 @@
     "socket.io-client": "^4.7.5",
     "sockjs": "^0.3.24",
     "tailwindcss": "^3.4.10",
-    "typescript": "5.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -63,6 +62,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/sockjs-client": "^1.5.4",
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "typescript": "^4.9.5"
   }
 }
