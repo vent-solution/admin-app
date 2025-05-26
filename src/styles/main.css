@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 * {
-  font-size: 96%;
+  font-size: 99%;
   padding: 0%;
   margin: 0;
   font-family: "Poppins";
@@ -12,15 +12,16 @@ input,
 select {
   font-size: 15px;
   font-weight: 500;
-  padding: 10px;
+  padding: 5px 10px;
 }
 
 label > span {
   color: red;
 }
 
-table {
-  border: 20px solid white;
+table tr td {
+  padding: 20px;
+  border: 1px solid #efefef;
 }
 
 .user {
@@ -49,14 +50,16 @@ Link.navLink {
 }
 
 tr td {
-  padding: 10px;
+  padding: 20px;
   color: black;
-  border: 1px solid #efefef;
 }
 tr td.actions {
   background-color: rgba(23, 37, 84, 0.5);
   color: white;
   visibility: hidden;
+}
+tr:hover td {
+  color: rgba(0, 0, 0, 0.8);
 }
 tr:hover td.actions {
   color: white;
@@ -71,35 +74,37 @@ tr:hover td.actions {
 .signup-form .login-form-inner {
   background-color: rgba(23, 37, 84, 0.85);
 }
-.login-form .login-form-inner .form-group label,
-.signup-form .login-form-inner .form-group label {
+
+.form-group label {
   font-size: 11pt;
 }
-.login-form .login-form-inner .form-group input,
-.signup-form .login-form-inner .form-group input {
+.form-group input {
   border: 2px white solid;
 }
-.login-form .login-form-inner .form-group small,
-.signup-form .login-form-inner .form-group small {
+.form-group small {
   visibility: hidden;
+  font-size: 12px;
 }
-.login-form .login-form-inner .form-group small.visible,
-.signup-form .login-form-inner .form-group small.visible {
+.form-group small.visible {
   visibility: visible;
 }
-.login-form .login-form-inner .form-group.required input,
-.signup-form .login-form-inner .form-group.required input {
-  border: 2px red solid;
+
+.form-group.required input,
+.form-group.required textarea,
+.form-group.required select {
+  border: 1px red solid;
 }
 
 .alert-overlay {
   background-color: rgba(23, 37, 84, 0.2);
 }
 
+.filter-form-overlay {
+  background-color: rgba(23, 37, 84, 0.5);
+}
+
 ul li.active {
-  margin: 0 2px;
-  border-bottom: red 3px solid;
-  background-color: #ffffff;
+  background-color: #efefef;
 }
 
 .custom-tooltip {
@@ -167,4 +172,32 @@ ul li.active {
   to {
     transform: rotateX(360deg) rotateY(360deg);
   }
+}
+/* src/CountryList.css */
+.country-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.country-card {
+  background: #f8f8f8;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 10px;
+  width: 250px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.country-card:hover {
+  transform: scale(1.05);
+}
+
+.country-flag {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
 }/*# sourceMappingURL=main.css.map */

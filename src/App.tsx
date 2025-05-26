@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 import UsersPage from "./modules/users/usersPage";
-import ResetPasswordPage from "./modules/auth/resetPasswordPage";
 import SignUpPage from "./modules/auth/signUpPage";
 import LandlordsPage from "./modules/landlords/LandlordsPage";
 import Layout from "./components/Layout";
@@ -46,7 +45,6 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<LoginPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
-        <Route path="/reset-password" element={<ResetPasswordPage />} />
 
         <Route path="dashboard">
           <Route index element={<Dashboard />} />

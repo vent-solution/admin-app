@@ -42,15 +42,7 @@ const LoginPage: React.FC<Props> = () => {
   }
 
   return (
-    <div
-      className="m-0 p-0 w-svw h-svh"
-      style={{
-        backgroundImage: `URL('images/login-bg-2.jpg')`,
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
+    <div className="">
       <LoginForm />
     </div>
   );

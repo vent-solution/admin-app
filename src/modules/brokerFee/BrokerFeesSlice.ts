@@ -28,6 +28,11 @@ export const fetchBrokerFees = createAsyncThunk(
   async ({ page, size }: { page: number; size: number }) => {
     try {
       const result = await fetchData(`/fetch-broker-fees/${page}/${size}`);
+
+      if (!result) {
+        return initialState;
+      }
+
       if (result.data.status && result.data.status !== "OK") {
         return initialState;
       }

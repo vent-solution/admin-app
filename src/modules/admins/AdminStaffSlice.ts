@@ -36,6 +36,11 @@ export const fetchAdminUsers = createAsyncThunk(
   ) => {
     try {
       const results = await fetchData(`fetch-admin-users/${page}/${size}`);
+
+      if (!results) {
+        return initialState;
+      }
+
       if (results.data.status && results.data.status !== "OK") {
         return initialState;
       }

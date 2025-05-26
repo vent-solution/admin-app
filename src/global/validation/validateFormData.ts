@@ -1,5 +1,6 @@
-const markRequiredFormField = (
-  field: HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement
+const validateFormData = (
+  field: HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement,
+  isValid?: boolean
 ) => {
   const parent: HTMLElement | null = field.parentElement;
 
@@ -7,7 +8,7 @@ const markRequiredFormField = (
 
   const small = parent?.querySelector("small");
 
-  if (field.value.trim().length <= 0) {
+  if (!isValid) {
     parent?.classList.add("required");
     small?.classList.add("visible");
   } else {
@@ -16,4 +17,4 @@ const markRequiredFormField = (
   }
 };
 
-export default markRequiredFormField;
+export default validateFormData;

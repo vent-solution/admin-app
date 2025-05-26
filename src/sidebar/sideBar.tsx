@@ -46,13 +46,14 @@ let SideBar: React.FC<Props> = ({ navLinks }) => {
           })
         );
       }
+
+      window.location.href = "/admin";
     } catch (error: any) {
       if (axios.isCancel(error)) {
         console.log("REQUEST CANCELLED: ", error.message);
       }
     } finally {
       setLoading(false);
-      window.location.href = "/";
       localStorage.removeItem("dnap-user");
     }
   };
@@ -72,7 +73,7 @@ let SideBar: React.FC<Props> = ({ navLinks }) => {
         <div className="logo  w-fit lg:w-1/3 font-bold">
           <img
             className="w-20 h-14"
-            src="/images/logo-no-background.png"
+            src="/admin/images/logo-no-background.png"
             alt=""
           />
         </div>
@@ -88,7 +89,7 @@ let SideBar: React.FC<Props> = ({ navLinks }) => {
           <div
             className="profile-image w-10 h-10 rounded-full hover:h-9 hover:w-9 cursor-pointer relative"
             style={{
-              background: "url('/images/Anatoli-profile-pic.jpeg')",
+              background: "url('/admin/images/Anatoli-profile-pic.jpeg')",
               backgroundSize: "cover",
             }}
             onClick={toggleShowProfileButtons}

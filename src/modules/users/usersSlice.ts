@@ -38,7 +38,6 @@ export const fetchUsers = createAsyncThunk(
   async ({ page, size }: { page: number; size: number }) => {
     try {
       const result = await fetchData(`/fetch-users/${page}/${size}`);
-      console.log(result);
 
       if (!result) return initialState;
 

@@ -1,82 +1,208 @@
 import React, { useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import markRequiredFormField from "../../global/validation/markRequiredFormField";
+import AlertMessage from "../../other/alertMessage";
+import { LoginModel } from "../users/models/loginModel";
+import axios from "axios";
+import { postData } from "../../global/api";
+import { AlertTypeEnum } from "../../global/enums/alertTypeEnum";
+import checkRequiredFormFields from "../../global/validation/checkRequiredFormFields";
+import { setAlert } from "../../other/alertSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../app/store";
 
-const ResetPasswordForm: React.FC = () => {
+interface Props {
+  setIsForgotPassword: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ResetPasswordForm: React.FC<Props> = ({ setIsForgotPassword }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const hindeAndShowPassword = () => {
-    if (showPassword) {
-      setShowPassword(false);
-    } else {
-      setShowPassword(true);
+  const [user, setUser] = useState<LoginModel>({
+    userName: "",
+    userPassword: "",
+  });
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  // check if all required fields are filled before saving
+  const canSave =
+    user.userName.trim().length > 0 && user.userPassword.trim().length > 0;
+
+  // toggle show and hide password
+  const hideAndShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  // handle change form event
+  const handleChangeFormFieldEvent = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { id, value } = e.target;
+    setUser((prev) => ({ ...prev, [id]: value }));
+  };
+
+  // save the new password
+  const saveNewPassword = async () => {
+    if (!canSave) {
+      checkRequiredFormFields([
+        document.getElementById("userName") as HTMLInputElement,
+      ]);
+      checkRequiredFormFields([
+        document.getElementById("userPassword") as HTMLInputElement,
+      ]);
+
+      dispatch(
+        setAlert({
+          status: true,
+          type: AlertTypeEnum.danger,
+          message: "Please fill in all the required fields!",
+        })
+      );
+
+      return;
+    }
+
+    try {
+      // fetch the password reset token
+
+      const result = await postData("/reset-password", {
+        email: user.userName,
+      });
+
+      console.log(result.data);
+
+      if (result.data.status && result.data.status !== "OK") {
+        dispatch(
+          setAlert({
+            status: true,
+            type: AlertTypeEnum.danger,
+            message: result.data.message,
+          })
+        );
+        return;
+      } else {
+        // save the new password after receiving the password reset token
+        const token = result.data; // Extract the token
+        if (!token) {
+          console.log("Invalid token received from server.");
+          return;
+        }
+
+        // Save the new password
+        const result2 = await postData(
+          `/save-password?token=${encodeURIComponent(token)}`,
+          {
+            newPassword: user.userPassword,
+          }
+        );
+
+        console.log(result2.data);
+
+        if (result2.data.status && result2.data.status !== "OK") {
+          dispatch(
+            setAlert({
+              status: true,
+              type: AlertTypeEnum.danger,
+              message: result2.data.message,
+            })
+          );
+          return;
+        } else {
+          dispatch(
+            setAlert({
+              status: true,
+              type: AlertTypeEnum.success,
+              message: result2.data.message,
+            })
+          );
+
+          setIsForgotPassword(false);
+        }
+      }
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        console.log("GET PASSWORD RESET TOKEN CANCELLED: ", error.message);
+      }
     }
   };
 
   return (
-    <form
-      className="login-form w-full h-full p-2 lg:p-10  relative  flex flex-wrap justify-center items-center"
-      action=""
-      onSubmit={(e: React.FormEvent) => e.preventDefault()}
-    >
-      <div className="login-form-inner w-full  lg:w-1/4 relative p-5 lg:p-10 rounded-md ">
-        <div className="w-full p-3 lg:p-10 bg-red-950 flex justify-center">
-          <img
-            src="images/logo-no-background.png"
-            width={130}
-            height={130}
-            alt=""
-          />
-        </div>
-        <div className="form-group py-2">
-          <label htmlFor="email" className="w-full text-white">
-            Email/Telephone*
+    <>
+      <div className="login-form-inner w-full relative rounded-md text-white">
+        <h1 className="text-xl pb-5">Reset your vent password</h1>
+
+        {/* email or telephone form field */}
+        <div className="form-group">
+          <label htmlFor="userName" className="w-full text-white">
+            Email<span className="text-red-600">*</span>
           </label>
           <input
             type="text"
-            id="email"
+            id="userName"
             autoFocus
             autoComplete="false"
-            placeholder="Email or Telephone*"
-            className="w-full outline-none rounded-lg"
+            value={user.userName}
+            placeholder="Enter email or Telephone*"
+            className="w-full outline-none rounded-lg py-2 text-black"
+            onChange={(e) => {
+              handleChangeFormFieldEvent(e);
+              markRequiredFormField(e.target);
+            }}
           />
-          <small className="w-full"></small>
+          <small className="w-full text-red-600">
+            {" "}
+            Email or telephone is required!
+          </small>
         </div>
+
+        {/* password form field */}
         <div className="form-group relative py-2">
-          <label htmlFor="password" className="w-full text-white">
-            Password*
+          <label htmlFor="userPassword" className="w-full text-white">
+            New password<span className="text-red-600">*</span>
           </label>
           <input
             type={`${showPassword ? "text" : "password"}`}
-            id="password"
+            id="userPassword"
             autoComplete="false"
-            placeholder="Password*"
-            className="w-full outline-none rounded-lg"
+            value={user.userPassword}
+            placeholder="Enter Password*"
+            className="w-full outline-none rounded-lg py-2 text-black"
+            onChange={(e) => {
+              handleChangeFormFieldEvent(e);
+              markRequiredFormField(e.target);
+            }}
           />
-          <small className="w-full"></small>
+          <small className="w-full text-red-600">
+            {" "}
+            New password is required!
+          </small>
           <div
-            className="absolute right-0 top-1/2 text-blue-800 text-lg  px-2  mr-2 cursor-pointer"
-            onClick={() => hindeAndShowPassword()}
+            className="absolute right-0 top-10 text-blue-800 text-lg  px-2  mr-2 cursor-pointer lg:hover:text-blue-600"
+            onClick={() => hideAndShowPassword()}
           >
             {showPassword ? <FaEye /> : <FaEyeSlash />}
           </div>
         </div>
-        <Link to="/" className="forgot-password pt-5 text-blue-300 text-lg">
+        <p
+          className="forgot-password text-blue-500 lg:hover:text-blue-300 text-lg cursor-pointer"
+          onClick={() => setIsForgotPassword(false)}
+        >
           Login Instead?
-        </Link>
-        <div className="form-group flex flex-wrap justify-center py-10  text-gold">
-          <button className="w-full bg-red-950 p-3 text-lg text-white hover:bg-red-800 active:translate-x-2">
+        </p>
+        <div className="form-group flex flex-wrap justify-center pt-10  text-gold">
+          <button
+            className="w-full bg-blue-600 p-3 text-lg text-white hover:bg-blue-400 active:scale-95"
+            onClick={() => {
+              saveNewPassword();
+            }}
+          >
             Reset Password
           </button>
-          <p className="w-full pt-5 text-blue-300">
-            Have no account?{" "}
-            <Link to="/sign-up" className="text-xl text-blue-500">
-              Sign Up
-            </Link>
-          </p>
         </div>
       </div>
-    </form>
+      <AlertMessage />
+    </>
   );
 };
 

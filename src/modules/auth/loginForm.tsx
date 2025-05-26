@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { setAlert } from "../../other/alertSlice";
 import { getSettings } from "../settings/SettingsSlice";
+import ResetPasswordForm from "./resetPasswordForm";
 
 const LoginForm: React.FC = () => {
   // local state variables
@@ -25,6 +26,8 @@ const LoginForm: React.FC = () => {
     userName: "",
     userPassword: "",
   });
+
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -117,77 +120,102 @@ const LoginForm: React.FC = () => {
 
   return (
     <form
-      className="login-form w-full h-full p-2 lg:p-10 relative  flex flex-wrap justify-center items-center"
+      className="login-for p-2 lg:p-10 relative  flex flex-wrap justify-center items-center bg-blue-950 text-sm lg:h-svh min-h-svh"
       action=""
       onSubmit={(e: React.FormEvent) => e.preventDefault()}
     >
-      <div className="login-form-inner w-full  lg:w-1/4 relative p-5 lg:p-10 rounded-md ">
-        <div className="w-full p-3 lg:p-10 bg-red-950 flex justify-center">
+      <div className="text-white w-full lg:w-1/3 p-3 lg:p-5  flex flex-wrap justify-center items-center">
+        <div className="w-full flex justify-start items-end">
           <img
-            src="images/logo-no-background.png"
-            width={130}
-            height={130}
+            className="w-14 lg:w-20 h-14 lg:h-20"
+            src={`${process.env.REACT_APP_LOGO_IMAGE}/logo-no-background.png`}
             alt=""
           />
+          <h1 className=" text-3xl lg:text-5xl font-extrabold">ENT</h1>
         </div>
-        <div className="form-group py-2">
-          <label htmlFor="userName" className="w-full text-white">
-            Email*
-          </label>
-          <input
-            type="text"
-            id="userName"
-            autoFocus
-            autoComplete="false"
-            aria-label="User name"
-            placeholder="Email or Telephone*"
-            className="w-full outline-none rounded-lg"
-            value={loginDetails.userName}
-            onChange={handleChange}
-          />
-          <small className="w-full text-red-200">
-            Email or telephone is required!
-          </small>
-        </div>
-        <div className="form-group relative py-2">
-          <label htmlFor="userPassword" className="w-full text-white">
-            Password*
-          </label>
-          <input
-            type={`${showPassword ? "text" : "password"}`}
-            id="userPassword"
-            autoComplete="false"
-            aria-label="Password"
-            placeholder="Password*"
-            className="w-full outline-none rounded-lg"
-            value={loginDetails.userPassword}
-            onChange={handleChange}
-          />
-          <small className="w-full text-red-200">Password is required!</small>
-          <div
-            className="absolute right-0 top-1/2 text-blue-800 text-lg  px-2  mr-2 cursor-pointer"
-            onClick={handleTogglePassword}
-          >
-            {showPassword ? <FaEye /> : <FaEyeSlash />}
+        <div className="text-gray-400 h-3/4 flex flex-wrap items-center justify-center w-full text-start py-20 text-xl lg:text-3xl">
+          <div className="h-fit capitalize font-extralight">
+            <p className="w-full">welcome to vent.</p>
+            <p className="w-full">
+              the World's number one real-estate solution.
+            </p>
           </div>
         </div>
-        <Link
-          to="/reset-password"
-          className="forgot-password mt-24 text-blue-300 text-lg"
-        >
-          Forgot password?
-        </Link>
-        <div className="form-group flex flex-wrap justify-center py-10  text-gold">
-          <button
-            className="w-full bg-red-950 p-3 text-lg text-white hover:bg-red-800 active:translate-x-2"
-            disabled={loading}
-            onClick={handleLogIn}
-          >
-            {loading ? "Logging in..." : "Log In"}
-          </button>
-          <p className="w-full pt-5 text-blue-300">
+        <h1 className="text-xs w-full text-start">&copy; vent solutions</h1>
+      </div>
+
+      <div className="login-form-inner w-full  lg:w-1/4 relative p-5 lg:p-10 rounded-3xl bg-white  bg-opacity-10 shadow-white shadow-sm text-black">
+        {isForgotPassword ? (
+          <ResetPasswordForm setIsForgotPassword={setIsForgotPassword} />
+        ) : (
+          <>
+            <div className="form-group py-2">
+              <label htmlFor="userName" className="w-full text-white">
+                Email<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="userName"
+                autoFocus
+                autoComplete="off"
+                aria-label="User name"
+                placeholder="Email or Telephone*"
+                className="w-full outline-none rounded-lg py-2"
+                value={loginDetails.userName}
+                onChange={handleChange}
+              />
+              <small className="w-full text-red-200">
+                Email or telephone is required!
+              </small>
+            </div>
+            <div className="form-group relative py-2">
+              <label htmlFor="userPassword" className="w-full text-white">
+                Password <span className="text-red-500">*</span>
+              </label>
+              <input
+                type={`${showPassword ? "text" : "password"}`}
+                id="userPassword"
+                autoComplete="false"
+                aria-label="Password"
+                placeholder="Password*"
+                className="w-full outline-none rounded-lg py-2"
+                value={loginDetails.userPassword}
+                onChange={handleChange}
+              />
+              <small className="w-full text-red-200 text-sm">
+                Password is required!
+              </small>
+              <div
+                className="absolute h-1/2 right-0 top-6 flex items-center text-blue-800 text-lg  px-0  mr-2 cursor-pointer hover:text-blue-500"
+                onClick={handleTogglePassword}
+              >
+                {showPassword ? <FaEye /> : <FaEyeSlash />}
+              </div>
+            </div>
+            <div
+              className="forgot-password text-blue-500 text-sm pt-5 lg:hover:text-blue-300 cursor-pointer"
+              onClick={() => setIsForgotPassword(true)}
+            >
+              <p>Forgot password</p>
+            </div>
+          </>
+        )}
+        <div className="form-group flex flex-wrap justify-center pt-10  text-gold">
+          {!isForgotPassword && (
+            <button
+              className="w-full bg-blue-600 p-3 text-lg text-white hover:bg-blue-400 active:scale-95"
+              disabled={loading}
+              onClick={handleLogIn}
+            >
+              {loading ? "Logging in..." : "Log In"}
+            </button>
+          )}
+          <p className="w-full pt-5 text-blue-100">
             Have no account?{" "}
-            <Link to="/sign-up" className="text-xl text-blue-500">
+            <Link
+              to="/sign-up"
+              className="text-lg text-blue-500 lg:hover:text-blue-300"
+            >
               Sign up
             </Link>
           </p>

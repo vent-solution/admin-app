@@ -47,7 +47,9 @@ const SignUpForm = () => {
     user.gender === GenderEnum.male ||
     user.gender === GenderEnum.others;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { id, value } = e.target;
     setUser({ ...user, [id]: value });
     markRequiredFormField(e.target);
@@ -69,12 +71,18 @@ const SignUpForm = () => {
 
     // check if all the required form fields are filled
     if (
-      (user.firstName && user.firstName.trim().length < 1) ||
-      (user.lastName && user.lastName.trim().length < 1) ||
-      (user.userEmail && user.userEmail.trim().length < 1) ||
-      (user.userTelephone && user.userTelephone.trim().length < 1) ||
-      (user.gender && user.gender.trim().length < 1) ||
-      (user.userPassword && user.userPassword.trim().length < 1)
+      !user.firstName ||
+      user.firstName.trim().length < 1 ||
+      !user.lastName ||
+      user.lastName.trim().length < 1 ||
+      !user.userEmail ||
+      user.userEmail.trim().length < 1 ||
+      !user.userTelephone ||
+      user.userTelephone.trim().length < 1 ||
+      !user.gender ||
+      user.gender.trim().length < 1 ||
+      !user.userPassword ||
+      user.userPassword.trim().length < 1
     ) {
       checkRequiredFormFields([
         firstName,
@@ -185,187 +193,216 @@ const SignUpForm = () => {
       }
     } finally {
       setLoading(false);
-      // clear form after sign-up
-      // setUser({
-      //   firstName: "",
-      //   lastName: "",
-      //   otherNames: "",
-      //   gender: "",
-      //   userRole: UserRoleEnum.admin,
-      //   userTelephone: "",
-      //   userEmail: "",
-      //   userPassword: "",
-      //   addedBy: null,
-      //   linkedTo: null,
-      // });
     }
   };
 
   return (
     <form
-      className="signup-form w-full h-full p-2 :lg:p-10 relative flex flex-wrap justify-center items-center"
+      className="login-for relative  flex flex-wrap justify-center items-start bg-blue-950 text-sm min-h-svh"
+      action=""
       onSubmit={(e: React.FormEvent) => e.preventDefault()}
     >
-      <div className="login-form-inner w-full lg:w-1/2 relative p-5 lg:p-10 rounded-md flex flex-wrap">
-        {/* Header logo */}
-        <div className="w-full p-3 lg:p-10 bg-red-950 flex justify-center">
+      <div className=" text-white w-full lg:w-1/3 p-3 lg:p-5  flex flex-wrap justify-center items-center lg:h-svh lg:sticky top-0 lg:py-32">
+        <div className="w-full flex justify-start items-end">
           <img
-            src="images/logo-no-background.png"
-            width={130}
-            height={130}
+            className="w-14 lg:w-20 h-14 lg:h-20"
+            src={`${process.env.REACT_APP_LOGO_IMAGE}/logo-no-background.png`}
             alt=""
           />
+          <h1 className="text-3xl lg:text-5xl font-extrabold">ENT</h1>
         </div>
-
-        {/* First name input field */}
-        <div className="form-group py-2 w-full lg:w-1/2 px-5">
-          <label htmlFor="firstName" className="w-full text-white">
-            First name*
-          </label>
-          <input
-            type="text"
-            id="firstName"
-            autoComplete="off"
-            autoFocus
-            placeholder="First name*"
-            className="w-full outline-none rounded-lg border-2"
-            value={user.firstName}
-            onChange={handleChange}
-          />
-          <small className="w-full text-red-200">First name is required.</small>
-        </div>
-
-        {/* Last name input field */}
-        <div className="form-group py-2 w-full lg:w-1/2 px-5">
-          <label htmlFor="lastName" className="w-full text-white">
-            Last name*
-          </label>
-          <input
-            type="text"
-            id="lastName"
-            autoComplete="off"
-            placeholder="Last name*"
-            className="w-full outline-none rounded-lg"
-            value={user.lastName}
-            onChange={handleChange}
-          />
-          <small className="w-full text-red-200">Last name is required.</small>
-        </div>
-
-        {/* Other names form field */}
-        <div className="form-group py-2 w-full px-5">
-          <label htmlFor="otherNames" className="w-full text-white">
-            Other names
-          </label>
-          <input
-            type="text"
-            id="otherNames"
-            autoComplete="off"
-            placeholder="Other names"
-            className="w-full outline-none rounded-lg"
-            value={user.otherNames}
-            onChange={handleChange}
-          />
-        </div>
-
-        {/* Email input field */}
-        <div className="form-group py-2 w-full lg:w-1/2 px-5">
-          <label htmlFor="userEmail" className="w-full text-white">
-            Email*
-          </label>
-          <input
-            type="text"
-            id="userEmail"
-            autoComplete="off"
-            placeholder="Email*"
-            className="w-full outline-none rounded-lg"
-            value={user.userEmail}
-            onChange={handleChange}
-          />
-          <small className="w-full text-red-200">Email is required.</small>
-        </div>
-
-        {/* Telephone input field */}
-        <div className="form-group py-2 w-full lg:w-1/2 px-5">
-          <label htmlFor="userTelephone" className="w-full text-white">
-            Telephone*
-          </label>
-          <input
-            type="text"
-            id="userTelephone"
-            autoComplete="off"
-            placeholder="Telephone* +23578348990"
-            className="w-full outline-none rounded-lg"
-            value={user.userTelephone}
-            onChange={handleChange}
-          />
-          <small className="w-full text-red-200">
-            Telephone number is required
-          </small>
-        </div>
-
-        {/* Gender form field */}
-        <div className="form-group py-2 w-full lg:w-1/2 px-5">
-          <label htmlFor="gender" className="w-full text-white">
-            Gender*
-          </label>
-          <input
-            type="text"
-            id="gender"
-            list="genderList"
-            autoComplete="off"
-            placeholder="Gender*"
-            className="w-full outline-none rounded-lg"
-            value={user.gender}
-            onChange={handleChange}
-          />
-          <datalist id="genderList">
-            {GenderValues.map((gender, index) => (
-              <option key={index} value={gender} />
-            ))}
-          </datalist>
-          <small className="w-full text-red-200">Gender is required.</small>
-        </div>
-
-        {/* Password input field */}
-        <div className="form-group relative py-0 lg:py-2 w-full lg:w-1/2 pl-5">
-          <label htmlFor="userPassword" className="w-full text-white">
-            Password*
-          </label>
-          <input
-            type={showPassword ? "text" : "password"}
-            id="userPassword"
-            autoComplete="off"
-            placeholder="Password*"
-            className="w-full outline-none rounded-lg"
-            value={user.userPassword}
-            onChange={handleChange}
-          />
-          <small className="w-full text-red-200">Password is required.</small>
-          <div
-            className="absolute right-0 top-1/2 text-blue-800 text-lg px-2 mr-2 cursor-pointer"
-            onClick={handleTogglePassword}
-          >
-            {showPassword ? <FaEye /> : <FaEyeSlash />}
+        <div className="text-gray-400 h-3/4 flex flex-wrap items-center justify-center w-full text-start py-20 text-xl lg:text-3xl">
+          <div className="h-fit capitalize font-extralight">
+            <p className="w-full">welcome to vent.</p>
+            <p className="w-full">
+              the World's number one real-estate solution.
+            </p>
           </div>
         </div>
+        <h1 className="text-xs w-full text-start">&copy; vent solutions</h1>
+      </div>
 
-        {/* action buttons */}
-        <div className="form-group w-full flex flex-wrap justify-center py-10 text-gold">
-          <button
-            className="w-full bg-red-950 p-3 text-lg text-white hover:bg-red-800 active:translate-x-2"
-            onClick={signUp}
-            disabled={loading}
-          >
-            {loading ? "Signing Up..." : "Sign Up"}
-          </button>
-          <p className="w-full pt-5 text-blue-300">
-            Have an account already?{" "}
-            <Link to="/" className="text-xl text-blue-500">
-              Log In
-            </Link>
-          </p>
+      <div className="login-form-inner w-full lg:w-1/2 relative px-5 rounded-md  bg-blue-700 flex flex-wrap bg-opacity-10 shadow-sm pb-10">
+        <div className="w-full p-5 flex justify-center lg:sticky -top-32 bg-inherit">
+          <h1 className="text-white text-2xl border-b-2 border-b-white w-full">
+            Create a vent account{" "}
+            {user.userRole && <span>({user.userRole})</span>}
+          </h1>
         </div>
+
+        <>
+          {/* First name input field */}
+          <div className="form-group py-2 w-full lg:w-1/2 px-5">
+            <label htmlFor="firstName" className="w-full text-white">
+              First name <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="firstName"
+              autoComplete="off"
+              autoFocus
+              placeholder="First name*"
+              className="w-full outline-none rounded-lg border-2 bg-gray-200 py-2"
+              value={user.firstName || ""}
+              onChange={(e) => {
+                handleChange(e);
+                markRequiredFormField(e.target);
+              }}
+            />
+            <small className="w-full text-red-300">
+              First name is required.
+            </small>
+          </div>
+
+          {/* Last name input field */}
+          <div className="form-group py-2 w-full lg:w-1/2 px-5">
+            <label htmlFor="lastName" className="w-full text-white">
+              Last name <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="lastName"
+              autoComplete="off"
+              placeholder="Last name*"
+              className="w-full outline-none rounded-lg bg-gray-200 py-2"
+              value={user.lastName || ""}
+              onChange={(e) => {
+                handleChange(e);
+                markRequiredFormField(e.target);
+              }}
+            />
+            <small className="w-full text-red-300">
+              Last name is required.
+            </small>
+          </div>
+
+          {/* Other names form field */}
+          <div className="form-group py-2 w-full px-5">
+            <label htmlFor="otherNames" className="w-full text-white">
+              Other names
+            </label>
+            <input
+              type="text"
+              id="otherNames"
+              autoComplete="off"
+              placeholder="Other names"
+              className="w-full outline-none rounded-lg bg-gray-200 py-2"
+              value={user.otherNames || ""}
+              onChange={handleChange}
+            />
+          </div>
+
+          {/* Email input field */}
+          <div className="form-group py-2 w-full lg:w-1/2 px-5">
+            <label htmlFor="userEmail" className="w-full text-white">
+              Email <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="userEmail"
+              autoComplete="off"
+              placeholder="Email* Eg. example@domain.com"
+              className="w-full outline-none rounded-lg bg-gray-200 py-2"
+              value={user.userEmail || ""}
+              onChange={(e) => {
+                handleChange(e);
+                markRequiredFormField(e.target);
+              }}
+            />
+            <small className="w-full text-red-300">Email is required.</small>
+          </div>
+
+          {/* Telephone input field */}
+          <div className="form-group py-2 w-full lg:w-1/2 px-5">
+            <label htmlFor="userTelephone" className="w-full text-white">
+              Telephone <span className="text-red-500">*</span>
+            </label>
+
+            <input
+              type="text"
+              id="userTelephone"
+              autoComplete="off"
+              placeholder="Telephone* Eg. +23578348990"
+              className="w-full outline-none rounded-lg bg-gray-200 py-2"
+              value={user.userTelephone || ""}
+              onChange={(e) => {
+                handleChange(e);
+                markRequiredFormField(e.target);
+              }}
+            />
+
+            <small className="w-full text-red-300">
+              Telephone number is required
+            </small>
+          </div>
+
+          {/* Gender form field */}
+          <div className="form-group py-2 w-full lg:w-1/2 px-5">
+            <label htmlFor="gender" className="w-full text-white">
+              Gender <span className="text-red-500">*</span>
+            </label>
+            <select
+              name="gender"
+              id="gender"
+              className="w-full outline-none rounded-lg bg-gray-200 py-3"
+              onChange={(e) => {
+                handleChange(e);
+                markRequiredFormField(e.target);
+              }}
+            >
+              <option value="">SELECT GENDER</option>
+              {GenderValues.map((gender, index) => (
+                <option key={index} value={gender} className="capitalize">
+                  {gender}
+                </option>
+              ))}
+            </select>
+            <small className="w-full text-red-300">Gender is required.</small>
+          </div>
+
+          {/* Password input field */}
+          <div className="relative form-group py-2 w-full lg:w-1/2 px-5 text-black">
+            <label htmlFor="userPassword" className="w-full text-white">
+              Password <span className="text-red-500">*</span>
+            </label>
+            <input
+              type={showPassword ? "text" : "password"}
+              id="userPassword"
+              autoComplete="off"
+              placeholder="Password*"
+              className="w-full outline-none rounded-lg bg-gray-200 py-2"
+              value={user.userPassword || ""}
+              onChange={(e) => {
+                handleChange(e);
+                markRequiredFormField(e.target);
+              }}
+            />
+            <small className="w-full text-red-300">Password is required.</small>
+            <div
+              className="absolute right-0 top-9 lg:top-10 text-blue-800 lg:hover:text-blue-500 text-2xl lg:text-xl px-3 mr-3 cursor-pointer"
+              onClick={handleTogglePassword}
+            >
+              {showPassword ? <FaEye /> : <FaEyeSlash />}
+            </div>
+          </div>
+
+          {/* action buttons */}
+          <div className="form-group w-full flex flex-wrap justify-around py-5 text-gold pl-5">
+            <button
+              className="w-1/3 bg-blue-600 p-2 text-lg text-white hover:bg-blue-400 active:translate-x-2"
+              onClick={signUp}
+              disabled={loading}
+            >
+              {loading ? "Saving..." : "Sign up"}
+            </button>
+          </div>
+        </>
+        <p className="w-full pt-5 text-blue-100 px-5">
+          Have an account already?{" "}
+          <Link to="/" className="text-xl text-blue-500 lg:hover:text-blue-300">
+            Log In
+          </Link>
+        </p>
       </div>
       <AlertMessage />
     </form>

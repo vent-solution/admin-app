@@ -5,7 +5,7 @@
 @import "./colors.scss";
 
 * {
-  font-size: 96%;
+  font-size: 99%;
   padding: 0%;
   margin: 0;
   font-family: "Poppins";
@@ -15,7 +15,7 @@ input,
 select {
   font-size: 15px;
   font-weight: 500;
-  padding: 10px;
+  padding: 5px 10px;
 }
 
 label > span {
@@ -23,7 +23,12 @@ label > span {
 }
 
 table {
-  border: 20px solid white;
+  tr {
+    td {
+      padding: 20px;
+      border: 1px solid #efefef;
+    }
+  }
 }
 
 .user {
@@ -57,9 +62,8 @@ Link.navLink {
 
 tr {
   td {
-    padding: 10px;
+    padding: 20px;
     color: rgba($color: #000000, $alpha: 1);
-    border: 1px solid #efefef;
   }
   td.actions {
     $varbg: rgb(23 37 84);
@@ -68,8 +72,12 @@ tr {
     visibility: hidden;
   }
   &:hover {
-    // font-weight: 500;
+    td {
+      color: rgba($color: #000000, $alpha: 0.8);
+    }
     td.actions {
+      // $varbg: rgb(23 37 84);
+      // background-color: rgba($color: $varbg, $alpha: 0.5);
       color: white;
       visibility: visible;
     }
@@ -85,30 +93,33 @@ tr {
     $varbg: rgb(23 37 84);
     background-color: rgba($color: $varbg, $alpha: 0.85);
     // box-shadow: 0px 0px 60px 10px rgb(69 10 10);
+  }
+}
 
-    .form-group {
-      label {
-        font-size: 11pt;
-      }
+.form-group {
+  label {
+    font-size: 11pt;
+  }
 
-      input {
-        border: 2px white solid;
-      }
+  input {
+    border: 2px white solid;
+  }
 
-      small {
-        visibility: hidden;
-      }
+  small {
+    visibility: hidden;
+    font-size: 12px;
+  }
 
-      small.visible {
-        visibility: visible;
-      }
-    }
+  small.visible {
+    visibility: visible;
+  }
+}
 
-    .form-group.required {
-      input {
-        border: 2px red solid;
-      }
-    }
+.form-group.required {
+  input,
+  textarea,
+  select {
+    border: 1px red solid;
   }
 }
 
@@ -117,11 +128,15 @@ tr {
   background-color: rgba($color: $varbg, $alpha: 0.2);
 }
 
+.filter-form-overlay {
+  $varbg: rgb(23 37 84);
+  background-color: rgba($color: $varbg, $alpha: 0.5);
+}
+
 ul {
   li.active {
-    margin: 0 2px;
-    border-bottom: red 3px solid;
-    background-color: #ffffff;
+    // border-bottom: red 5px solid;
+    background-color: #efefef;
   }
 }
 
@@ -185,4 +200,34 @@ ul {
   to {
     transform: rotateX(360deg) rotateY(360deg);
   }
+}
+
+// TESTING THE COUNTRY LIST
+/* src/CountryList.css */
+.country-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.country-card {
+  background: #f8f8f8;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 10px;
+  width: 250px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.country-card:hover {
+  transform: scale(1.05);
+}
+
+.country-flag {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
 }
